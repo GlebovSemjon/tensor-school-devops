@@ -1,0 +1,17 @@
+all:
+  hosts:
+  children:
+    nodes:
+      hosts:
+        linserv1:
+          ansible_host: '192.168.56.101'
+          ansible_user: 'ansible'
+          ansible_ssh_private_key_file: '~/.ssh/id_rsa_ansible'
+  vars:
+    server_hostname: 'hometasks1.local'
+    key_size: 2048
+    key_type: 'RSA'
+    SSL_dir: '/etc/nginx/ssl'
+    nginx_port_no_tls: 80
+    nginx_port_tls: 443
+    nginx_root_dir: '/usr/share/nginx/html2'

@@ -1,0 +1,77 @@
+---
+- name: install pyOpenSSL
+  yum:
+    name: https://cbs.centos.org/kojifiles/packages/pyOpenSSL/0.15.1/1.el7/noarch/pyOpenSSL-0.15.1-1.el7.noarch.rpm
+    state: present
+
+- name: сreate SSL directory
+  ansible.builtin.file:
+    path: "{{ SSL_dir }}"
+    state: directory
+    owner: root
+    group: root    
+    mode: '0600'
+
+- name: Generate an OpenSSL private key
+  community.crypto.openssl_privatekey:
+    path: "{{ SSL_dir }}/{{ server_hostname }}.key"
+    size: "{{ key_size }}"
+    type: "{{ key_type }}"
+    backup: yes
+
+- name: Generate an OpenSSL Certificate Signing Request
+  community.crypto.openssl_csr:
+    path: "{{ SSL_dir }}/{{ server_hostname }}.csr"
+    privatekey_path: "{{ SSL_dir }}/{{ server_hostname }}.key"
+
+- name: Generate a Self Signed OpenSSL certificate
+  community.crypto.x509_certificate:
+    provider: selfsigned
+    path: "{{ SSL_dir }}/{{ server_hostname }}.crt"
+    privatekey_path: "{{ SSL_dir }}/{{ server_hostname }}.key"
+    csr_path: "{{ SSL_dir }}/{{ server_hostname }}.csr"   
+
+- name: copy site's nginx config file
+  template:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/conf.d/tls.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: сreate {{ nginx_root_dir }} directory
+  ansible.builtin.file:
+    path: "{{ nginx_root_dir }}"
+    state: directory
+
+- name: copy index.html
+  template:
+    src: templates/index.html.j2
+    dest: "{{ nginx_root_dir }}/index.html"
+    owner: root
+    group: root
+    mode: 0644
+  
+- name: Check NGINX configs
+  shell: "/usr/sbin/nginx -t"
+  register: nginx_config_status
+
+- name: NGINX test status
+  debug:
+    msg: "{{ nginx_config_status.rc }}"
+
+- name: Service NGINX restart and enable on boot
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: nginx_config_status.rc == 0
+
+- name: insert firewalld rule for nginx
+  firewalld:
+    port: "{{ nginx_port_tls }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  ignore_errors: true

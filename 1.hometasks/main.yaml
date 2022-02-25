@@ -1,0 +1,35 @@
+---
+- hosts: nodes
+  become: true
+  roles:
+  - { role: nginx-no-tls }
+  - { role: nginx-on-tls }
+  post_tasks:
+  - name: check web site from control server
+    become: false
+    uri:
+      url: "http://{{ ansible_host }}:{{ nginx_port_no_tls }}"
+      return_content: true
+    connection: local
+    register: example_webpage_out
+    failed_when: example_webpage_out.status != 200
+
+  - name: add hosts {{ server_hostname }}
+    connection: local
+    lineinfile:
+      dest: /etc/hosts
+      regexp: ''
+      line: "{{ ansible_host }} {{ server_hostname }}"
+      insertafter: EOF
+      backup: yes
+  
+  - name: check ssl https://{{ server_hostname }} from control server
+    become: false
+    uri:
+      url: "https://{{ server_hostname }}"
+      return_content: true
+      validate_certs: no
+    connection: local
+    register: example_webpage_out
+    failed_when: example_webpage_out.status != 200
+    
