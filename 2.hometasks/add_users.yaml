@@ -1,0 +1,19 @@
+---
+- name: add users
+  hosts: nodes
+  become: true
+  vars_files:
+    - users.yaml
+  tasks:
+  - name: Add users
+    ansible.builtin.user:
+      name: '{{ user.name }}'
+      comment: '{{ users_comment }}'
+      create_home: yes
+      shell: /bin/bash
+      password: '{{ user.pass | password_hash("sha512") }}'
+    loop: '{{ add_users }}'
+    loop_control:
+      loop_var: user
+      pause: 5
+    no_log: true
