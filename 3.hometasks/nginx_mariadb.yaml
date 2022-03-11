@@ -17,12 +17,13 @@
     - mariadb
   
   post_tasks:
-  - name: check NGINX install
+  - name: check NGINX and MariaDB install
     tags:
-    - nginx 
     - check
     block:
     - name: add hosts {{ server_hostname }}
+      tags: 
+      - nginx
       connection: local
       lineinfile:
         dest: /etc/hosts
@@ -33,6 +34,8 @@
 
     - name: check ssl https://{{ server_hostname }} from control server
       become: false
+      tags: 
+      - nginx
       uri:
         url: "https://{{ server_hostname }}"
         return_content: true
@@ -46,7 +49,6 @@
       become: false
       tags:
       - mariadb
-      - check
       wait_for:
         port: "{{ mysql_port }}"
         host: '{{ ansible_host }}'
