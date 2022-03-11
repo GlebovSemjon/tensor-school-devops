@@ -1,6 +1,6 @@
 ДЗ 1
 ==
-cd 1.hometasks
+cd 1.hometasks  
 ansible-playbook -i inventory.yaml main.yaml
 
 ДЗ 2
@@ -11,6 +11,10 @@ cd 2.hometasks
 ansible-playbook -i inventory.yaml add_users.yaml --ask-vault-pass  
 vault-pass: Pass  
 
-Задача2:
+Задача 2:
 --
 ansible-playbook -i inventory.yaml HW/db_init/main.yaml  
+
+ДЗ 3
+==
+ansible-playbook -i inventory.yaml nginx_mariadb.yaml  

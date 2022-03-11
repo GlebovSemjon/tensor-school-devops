@@ -1,0 +1,3 @@
+key_size: 2048
+key_type: 'RSA'
+SSL_dir: '/etc/nginx/ssl'
