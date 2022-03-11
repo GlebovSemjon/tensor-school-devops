@@ -40,15 +40,16 @@
       connection: local
       register: example_webpage_out
       failed_when: example_webpage_out.status != 200
-
-  - name: check mysql_port 
-    become: false
-    tags:
-    - mariadb
-    - check
-    wait_for:
-      port: "{{ mysql_port }}"
-      host: '{{ ansible_host }}'
-      search_regex: MariaDB
-      timeout: 10
-    connection: local
+    
+    always:
+    - name: check mysql_port 
+      become: false
+      tags:
+      - mariadb
+      - check
+      wait_for:
+        port: "{{ mysql_port }}"
+        host: '{{ ansible_host }}'
+        search_regex: MariaDB
+        timeout: 10
+      connection: local
