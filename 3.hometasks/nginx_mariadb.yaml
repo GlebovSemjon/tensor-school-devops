@@ -5,10 +5,6 @@
     server_hostname: 'hometasks3.local'
     SSL_dir: '/etc/nginx/ssl'
   roles:
-  - role: create_SSL
-    tags: 
-    - nginx
-    - ssl
   - role: nginx_install
     tags: 
     - nginx

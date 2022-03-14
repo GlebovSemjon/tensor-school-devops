@@ -22,19 +22,23 @@
     mode: 0644
   notify: restart nginx
 
-- name: copy site's nginx config file
+- name: copy index.html
   template:
-    src: templates/nginx.conf.j2
-    dest: "/etc/nginx/conf.d/{{ server_hostname }}.conf"
+    src: templates/index.html.j2
+    dest: "{{ nginx_root_dir }}/index.html"
     owner: root
     group: root
     mode: 0644
   notify: restart nginx
 
-- name: copy index.html
+- name: import SSL certificate generation role
+  import_role:
+    name: create_SSL
+
+- name: copy site's nginx config file
   template:
-    src: templates/index.html.j2
-    dest: "{{ nginx_root_dir }}/index.html"
+    src: templates/nginx.conf.j2
+    dest: "/etc/nginx/conf.d/{{ server_hostname }}.conf"
     owner: root
     group: root
     mode: 0644
