@@ -52,7 +52,7 @@
 - name: NGINX test status
   debug:
     msg: "{{ nginx_config_status.stderr_lines }}"
-  failed_when: nginx_config_status.rc == 1  
+  failed_when: nginx_config_status.rc == 1 
 
 - name: ensure nginx is enabled and started
   service:
@@ -63,7 +63,7 @@
 - name: Populate service facts
   service_facts:
   register: service_facts_list
-  
+ 
 - name: Ensure firewalld rule for nginx is enabled
   firewalld:
     port: "{{ port }}/tcp"
@@ -74,5 +74,5 @@
     - "{{ nginx_port_no_tls }}"
     - "{{ nginx_port_tls }}"
   loop_control:
-    loop_var: port     
-  when: service_facts_list.ansible_facts.services["firewalld.service"].state == "running"  
+    loop_var: port    
+  when: service_facts_list.ansible_facts.services["firewalld.service"].state == "running" 

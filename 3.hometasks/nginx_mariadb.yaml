@@ -6,19 +6,19 @@
     SSL_dir: '/etc/nginx/ssl'
   roles:
   - role: nginx_install
-    tags: 
+    tags:
     - nginx
-  - role: mariadb_install 
-    tags: 
+  - role: mariadb_install
+    tags:
     - mariadb
-  
+ 
   post_tasks:
   - name: check NGINX and MariaDB install
     tags:
     - check
     block:
     - name: add hosts {{ server_hostname }}
-      tags: 
+      tags:
       - nginx
       connection: local
       lineinfile:
@@ -30,7 +30,7 @@
 
     - name: check ssl https://{{ server_hostname }} from control server
       become: false
-      tags: 
+      tags:
       - nginx
       uri:
         url: "https://{{ server_hostname }}"
@@ -39,9 +39,9 @@
       connection: local
       register: example_webpage_out
       failed_when: example_webpage_out.status != 200
-    
+   
     always:
-    - name: check mysql_port 
+    - name: check mysql_port
       become: false
       tags:
       - mariadb

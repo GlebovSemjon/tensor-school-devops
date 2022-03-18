@@ -9,7 +9,7 @@
     path: "{{ SSL_dir }}"
     state: directory
     owner: root
-    group: root    
+    group: root   
     mode: '0600'
 
 - name: Generate an OpenSSL private key
@@ -29,7 +29,7 @@
     provider: selfsigned
     path: "{{ SSL_dir }}/{{ server_hostname }}.crt"
     privatekey_path: "{{ SSL_dir }}/{{ server_hostname }}.key"
-    csr_path: "{{ SSL_dir }}/{{ server_hostname }}.csr"   
+    csr_path: "{{ SSL_dir }}/{{ server_hostname }}.csr"  
 
 - name: copy site's nginx config file
   template:
@@ -51,7 +51,7 @@
     owner: root
     group: root
     mode: 0644
-  
+ 
 - name: Check NGINX configs
   shell: "/usr/sbin/nginx -t"
   register: nginx_config_status

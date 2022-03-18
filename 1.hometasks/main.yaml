@@ -22,7 +22,7 @@
       line: "{{ ansible_host }} {{ server_hostname }}"
       insertafter: EOF
       backup: yes
-  
+ 
   - name: check ssl https://{{ server_hostname }} from control server
     become: false
     uri:
@@ -32,4 +32,4 @@
     connection: local
     register: example_webpage_out
     failed_when: example_webpage_out.status != 200
-    
+   

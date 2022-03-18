@@ -10,7 +10,7 @@
     path: "{{ SSL_dir }}"
     state: directory
     owner: root
-    group: root    
+    group: root   
     mode: '0600'
 
 - name: Generate an OpenSSL private key

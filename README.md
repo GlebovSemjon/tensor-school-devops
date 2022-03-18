@@ -19,3 +19,17 @@ ansible-playbook -i inventory.yaml HW/db_init/main.yaml
 ==
 cd 3.hometasks  
 ansible-playbook -i inventory.yaml nginx_mariadb.yaml  
+
+ДЗ 4
+==
+cd 3.hometasks  
+Задача 1:
+--
+
+Задача 2:
+--
+
+Задача 3:
+--  
+ansible-playbook -i inventory.yaml lnmp.yaml
+
