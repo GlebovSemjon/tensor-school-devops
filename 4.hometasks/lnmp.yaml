@@ -1,0 +1,60 @@
+---
+- hosts: nodes
+  become: true
+  vars_files:
+    - vars/main.yaml
+  roles:
+  - role: nginx_install
+    tags:
+    - nginx
+  - role: mariadb_install
+    tags:
+    - mariadb
+  - role: php-fpm_install
+    tags:
+    - php
+  - role: wordpress_install
+    tags:
+    - wordpress
+
+
+#  post_tasks:
+#  - name: check NGINX and MariaDB install
+#    tags:
+#    - check
+#    block:
+#    - name: add hosts {{ server_hostname }}
+#      tags:
+#      - nginx
+#      connection: local
+#      lineinfile:
+#        dest: /etc/hosts
+#        regexp: ''
+#        line: "{{ ansible_host }} {{ server_hostname }}"
+#        insertafter: EOF
+#        backup: yes
+#
+#    - name: check ssl https://{{ server_hostname }} from control server
+#      become: false
+#      tags:
+#      - nginx
+#      uri:
+#        url: "https://{{ server_hostname }}"
+#        return_content: true
+#        validate_certs: no
+#      connection: local
+#      register: example_webpage_out
+#      failed_when: example_webpage_out.status != 200
+#  
+#    always:
+#    - name: check mysql_port
+#      become: false
+#      tags:
+#      - mariadb
+#      wait_for:
+#        port: "{{ mysql_port }}"
+#        host: '{{ ansible_host }}'
+#        search_regex: MariaDB
+#        timeout: 10
+#      connection: local
+#

@@ -1,0 +1,21 @@
+---
+- name: create epel repo definition
+  copy:
+    src: repo/
+    dest: /etc/yum.repos.d/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install packages from 'php_packages_list'
+  yum:
+    name: "{{ package }}"
+  loop: "{{ php_packages_list }}"
+  loop_control:
+    loop_var: package
+
+- name: Start php-fpm Service
+  service:
+    name: php-fpm
+    state: started
+    enabled: true
