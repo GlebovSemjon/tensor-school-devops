@@ -8,3 +8,13 @@
       healthcheck_sh:
         addr: "ansible-node1.localdomai"
         tls: true
+      register: bash_result
+
+    - name: print result
+      debug:
+        msg: "{{ bash_result }}"
+
+#    - name: healthcheck
+#      healthcheck_py:
+#        addr: "ansible-node1.localdomain"
+#        tls: true

@@ -6,26 +6,28 @@ tls=$(cat $1 | grep -Po '(?<="tls": )(.*?)(?=,)')
 
 function errorcode_select {
     if echo $code | grep 'HTTP'; then
-        if echo $code | grep '200'; then
-            echo "{\"status\": \"200 Ok\", \"msg\": \"$addr, tls: false\"}"
+        if echo $code | grep 200; then
+            echo "{\"status\": \"$code Ok\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         elif echo $code | grep 1[0-9][0-9]; then
-            echo "{\"status\": \"$code, Informational\", \"msg\": \"$addr, tls: false\"}"
+            echo "{\"status\": \"$code Informational\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         elif echo $code | grep 2[0-9][0-9]; then
-            echo "{\"status\": \"$code, Success\", \"msg\": \"$addr, tls: false\"}"
+            echo "{\"status\": \"$code Success\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         elif echo $code | grep 3[0-9][0-9]; then
-            echo "{\"status\": \"$code, Redirection\", \"msg\": \"$addr, tls: false\"}"
+            echo "{\"status\": \"$code Redirection\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         elif echo $code | grep 4[0-9][0-9]; then
-            echo "{\"status\": \"$code, Client Error\", \"msg\": \"$addr, tls: false\"}"
+            echo "{\"status\": \"$code Client Error\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         elif echo $code | grep 5[0-9][0-9]; then
-            echo "{\"status\": \"$code, Server Error\", \"msg\": \"$addr, tls: false\"}"
+            echo "{\"status\": \"$code Server Error\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
         fi
+    else
+        echo "{\"status\": \"site not found\", \"site\": \"$addr\", \"tls\": \"$tls\"}"
     fi
 }
 
 if [[ $tls = 'true' ]]; then
-    code=$(curl -Isk -m 5 https://$addr | grep HTTP)
+    code=$(curl -Isk -m 5 https://$addr | grep HTTP | tr -d '\r\n')
     errorcode_select
 else
-    code=$(curl -Isk -m 5 https://$addr | grep HTTP)
+    code=$(curl -Isk -m 5 https://$addr | grep HTTP | tr -d '\r\n')
     errorcode_select
 fi
