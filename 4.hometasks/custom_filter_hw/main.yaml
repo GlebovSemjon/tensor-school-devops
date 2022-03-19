@@ -1,0 +1,11 @@
+---
+- name: test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    mac: 48201568a686
+  tasks:
+    - name: conversion_mac
+      debug:
+        msg: "{{ mac | conversion_mac }}"

@@ -18,7 +18,7 @@ php_packages_list:
 # nginx vars
 nginx_port_tls: 443
 nginx_port_no_tls: 80
-server_hostname: ansible-node1.localdomain
+server_hostname: 'ansible-node1.localdomain'
 #server_hostname: 'hometasks3.local'
 SSL_dir: '/etc/nginx/ssl'
 
