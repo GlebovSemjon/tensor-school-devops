@@ -6,7 +6,7 @@
   tasks:
     - name: healthcheck
       healthcheck_sh:
-        addr: "ansible-node1.localdomai"
+        addr: "www.google.com"
         tls: true
       register: bash_result
 
