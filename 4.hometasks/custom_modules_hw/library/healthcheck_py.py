@@ -60,20 +60,6 @@ rc:
 '''
 import requests
 
-def concat_strings(str1, str2, str3):
-    failed = False
-    msg = "Strings concated successfully"
-    rc = 0
-    # Формируем конечную строку
-    try:
-        result = str1 + " " + str2 + " " + str3
-    except TypeError as e:
-        failed = True
-        result = ""
-        msg = "TypeError. Not all strings defined"
-        rc = 1
-    return(failed, result, rc, msg)
-
 def status_code(addr, tls):
   if tls == True:
     url = 'https://'+str(addr)
@@ -84,14 +70,14 @@ def status_code(addr, tls):
   result = ''
   rc = 1
   try:
-    response = requests.get(url, timeout=(5, 5))
+    response = requests.get(url, allow_redirects=False, timeout=5)
     response.raise_for_status()
-    result = url + ">> HTTP Ok, status code: " + str(response.status_code)
+    result = url + " >> HTTP Ok, status code: " + str(response.status_code)
     failed = False
     msg = "HTTP Ok, status code: " + str(response.status_code)
     rc = 0
   except requests.exceptions.HTTPError as err:
-    result = url + ">> HTTP Error code: "+ str(response.status_code)
+    result = url + " >> HTTP Error code: "+ str(response.status_code) + '. Response is: {content}'.format(content=err.response.content)
     msg = "HTTP Error code: "+ str(response.status_code)
   except requests.exceptions.ConnectionError:
     msg = 'Seems like dns lookup failed..' + url

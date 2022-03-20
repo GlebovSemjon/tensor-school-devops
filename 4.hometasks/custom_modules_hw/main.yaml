@@ -4,15 +4,18 @@
   connection: local
   gather_facts: false
   tasks:
-#    - name: healthcheck
-#      healthcheck_sh:
-#        addr: "www.google.com"
-#        tls: true
-#      register: bash_result
-#
-#    - name: print result
-#      debug:
-#        msg: "{{ bash_result }}"
+    - name: healthcheck
+      healthcheck_sh:
+        addr: "www.google.com"
+        tls: true
+      register: bash_result
+
+    - name: print result
+      debug:
+        msg: "{{ bash_result }}"
+    - name: Install requests python package
+      pip:
+        name: requests
 
     - name: healthcheck
       healthcheck_py:
