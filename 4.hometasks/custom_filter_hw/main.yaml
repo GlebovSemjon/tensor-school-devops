@@ -4,7 +4,7 @@
   connection: local
   gather_facts: false
   vars:
-    mac: 48201568a68d
+    mac: "{{ mac | default(48201568a68d) }}"
   tasks:
     - name: conversion_mac
       debug:

@@ -25,9 +25,13 @@ ansible-playbook -i inventory.yaml nginx_mariadb.yaml
 cd 3.hometasks  
 Задача 1:
 --
+cd custom_filter_hw  
+ansible-playbook main.yaml -e "mac=1234656789abc"  
 
 Задача 2:
 --
+cd custom_modules_hw  
+ansible-playbook main.yaml -e "url=www.google.com"  
 
 Задача 3:
 --  

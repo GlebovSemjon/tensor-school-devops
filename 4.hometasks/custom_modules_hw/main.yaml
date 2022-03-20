@@ -6,7 +6,7 @@
   tasks:
     - name: healthcheck
       healthcheck_sh:
-        addr: "www.google.com"
+        addr: "{{ url | default('ansible-node1.localdomain') }}"
         tls: true
       register: bash_result
 
@@ -19,7 +19,7 @@
 
     - name: healthcheck
       healthcheck_py:
-        addr: "google.com"
+        addr: "{{ url | default('ansible-node1.localdomain') }}"
         tls: false
       register: bash_result
 
