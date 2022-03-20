@@ -4,17 +4,22 @@
   connection: local
   gather_facts: false
   tasks:
+#    - name: healthcheck
+#      healthcheck_sh:
+#        addr: "www.google.com"
+#        tls: true
+#      register: bash_result
+#
+#    - name: print result
+#      debug:
+#        msg: "{{ bash_result }}"
+
     - name: healthcheck
-      healthcheck_sh:
-        addr: "www.google.com"
-        tls: true
+      healthcheck_py:
+        addr: "google.com"
+        tls: false
       register: bash_result
 
     - name: print result
       debug:
         msg: "{{ bash_result }}"
-
-#    - name: healthcheck
-#      healthcheck_py:
-#        addr: "ansible-node1.localdomain"
-#        tls: true

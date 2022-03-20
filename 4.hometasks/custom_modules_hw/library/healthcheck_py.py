@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from re import T
 from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = r'''
@@ -57,7 +58,49 @@ rc:
   type: int
   sample: 200
 '''
+import requests
 
+def concat_strings(str1, str2, str3):
+    failed = False
+    msg = "Strings concated successfully"
+    rc = 0
+    # Формируем конечную строку
+    try:
+        result = str1 + " " + str2 + " " + str3
+    except TypeError as e:
+        failed = True
+        result = ""
+        msg = "TypeError. Not all strings defined"
+        rc = 1
+    return(failed, result, rc, msg)
+
+def status_code(addr, tls):
+  if tls == True:
+    url = 'https://'+str(addr)
+  else:
+    url = 'http://'+str(addr)
+
+  failed = True
+  result = ''
+  rc = 1
+  try:
+    response = requests.get(url, timeout=(5, 5))
+    response.raise_for_status()
+    result = url + ">> HTTP Ok, status code: " + str(response.status_code)
+    failed = False
+    msg = "HTTP Ok, status code: " + str(response.status_code)
+    rc = 0
+  except requests.exceptions.HTTPError as err:
+    result = url + ">> HTTP Error code: "+ str(response.status_code)
+    msg = "HTTP Error code: "+ str(response.status_code)
+  except requests.exceptions.ConnectionError:
+    msg = 'Seems like dns lookup failed..' + url
+  except requests.exceptions.ConnectTimeout:
+    msg = 'Oops. Connection timeout occured!' + url
+  except requests.exceptions.ReadTimeout:
+    msg = 'Oops. Read timeout occured' + url
+  return(failed, result, rc, msg, url)
+    
 def main():
     # Аргументы для модуля
     arguments = dict(
@@ -73,6 +116,21 @@ def main():
     addr = module.params["addr"]
     tls = module.params["tls"]
 
+    lc_return = status_code(addr, tls)
+    # Если задача зафейлилась
+    if lc_return[0]:
+        module.fail_json(changed=False,
+                         failed=lc_return[0],
+                         result_str=lc_return[1],
+                         rc=lc_return[2],
+                         msg=lc_return[3])
+    # Если задача успешно завершилась
+    else:
+        module.exit_json(changed=False,
+                         failed=lc_return[0],
+                         result_str=lc_return[1],
+                         rc=lc_return[2],
+                         msg=lc_return[3])
 
 if __name__ == "__main__":
     main()
