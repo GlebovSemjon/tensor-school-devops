@@ -26,14 +26,13 @@ cd 3.hometasks
 Задача 1:
 --
 cd custom_filter_hw  
-ansible-playbook main.yaml -e "mac=1234656789abc"  
+ansible-playbook main.yaml  -e mac='12346987afe8'  
 
 Задача 2:
 --
 cd custom_modules_hw  
-ansible-playbook main.yaml -e "url=www.google.com"  
+ansible-playbook main.yaml -e url='gle.com' -t 'py'  
 
 Задача 3:
 --  
-ansible-playbook -i inventory.yaml lnmp.yaml
-
+ansible-playbook -i inventory.yaml lnmp.yaml  

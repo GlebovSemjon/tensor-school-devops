@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from re import T
+
 from ansible.module_utils.basic import AnsibleModule
 
 DOCUMENTATION = r'''

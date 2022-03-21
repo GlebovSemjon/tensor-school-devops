@@ -18,16 +18,16 @@
     - wordpress
 
   post_tasks:
-#  - name: add hosts {{ server_hostname }}
-#    tags:
-#    - check
-#    connection: local
-#    lineinfile:
-#      dest: /etc/hosts
-#      regexp: ''
-#      line: "{{ ansible_host }} {{ server_hostname }}"
-#      insertafter: EOF
-#      backup: yes
+  - name: add hosts {{ server_hostname }}
+    tags:
+    - check
+    connection: local
+    lineinfile:
+      dest: /etc/hosts
+      regexp: ''
+      line: "{{ ansible_host }} {{ server_hostname }}"
+      insertafter: EOF
+      backup: yes
   - name: check ssl https://{{ server_hostname }} from control server
     become: false
     uri:

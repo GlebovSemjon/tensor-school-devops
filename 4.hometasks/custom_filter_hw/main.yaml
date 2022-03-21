@@ -3,9 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
-  vars:
-    mac: "{{ mac | default(48201568a68d) }}"
   tasks:
     - name: conversion_mac
       debug:
-        msg: "{{ mac | conversion_mac }}"
+        msg: "{{ mac | default('48201568a68d') | conversion_mac }}"
