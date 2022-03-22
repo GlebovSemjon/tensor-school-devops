@@ -6,7 +6,7 @@ tls=$(cat $1 | grep -Po '(?<="tls": )(.*?)(?=,)')
 
 function errorcode_select {
     if echo $code | grep 'HTTP'; then
-        code_id=$( echo expr match "$code" '.*\([0-9][0-9][0-9]\)' )
+        code_id=$( echo `expr match "$code" '.*\([0-9][0-9][0-9]\)'` )
         if echo $code | grep 200; then
             echo "{\"failed\": false, \"rc\": \"$code_id\", \"msg\": \"Ok\", \"site_status\": \"$code\"}"
         elif echo $code | grep 1[0-9][0-9]; then
