@@ -1,26 +1,27 @@
 #!/bin/bash
-# WANT_JSON
+WANT_JSON
 
 addr=$(cat $1 | grep -Po '(?<="addr": ")(.*?)(?=")')
 tls=$(cat $1 | grep -Po '(?<="tls": )(.*?)(?=,)')
 
 function errorcode_select {
     if echo $code | grep 'HTTP'; then
+        code_id=$( echo expr match "$code" '.*\([0-9][0-9][0-9]\)' )
         if echo $code | grep 200; then
-            echo "{\"failed\": false, \"status\": \"$code\", \"msg\": \"Ok\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": false, \"rc\": \"$code_id\", \"msg\": \"Ok\", \"site_status\": \"$code\"}"
         elif echo $code | grep 1[0-9][0-9]; then
-            echo "{\"failed\": true, \"status\": \"$code\", \"msg\": \"Informational\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Informational\", \"site_status\": \"$code\"}"
         elif echo $code | grep 2[0-9][0-9]; then
-            echo "{\"failed\": true, \"status\": \"$code\", \"msg\": \"Success\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Success\", \"site_status\": \"$code\"}"
         elif echo $code | grep 3[0-9][0-9]; then
-            echo "{\"failed\": true, \"status\": \"$code\", \"msg\": \"Redirection\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Redirection\", \"site_status\": \"$code\"}"
         elif echo $code | grep 4[0-9][0-9]; then
-            echo "{\"failed\": true, \"status\": \"$code\", \"msg\": \"Client Error\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Client Error\", \"site_status\": \"$code\"}"
         elif echo $code | grep 5[0-9][0-9]; then
-            echo "{\"failed\": true, \"status\": \"$code\", \"msg\": \"Server Error\", \"site\": \"$addr\", \"tls\": $tls}"
+            echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Server Error\", \"site_status\": \"$code\"}"
         fi
     else
-        echo "{\"failed\": true, \"msg\": \"site not found\", \"site\": \"$addr\", \"tls\": $tls}"
+        echo "{\"failed\": true, \"rc\": \"0\", \"msg\": \"site not found\", \"site_status\": \"$code\"}"
     fi
 }
 
