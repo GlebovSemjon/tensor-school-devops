@@ -67,25 +67,27 @@ def status_code(addr, tls):
     url = 'http://'+str(addr)
 
   failed = True
-  result = ''
+  site_status = ''
+  msg = ''
   rc = 1
   try:
     response = requests.get(url, verify=False, allow_redirects=False, timeout=5)
     response.raise_for_status()
-    result = url + " >> HTTP Ok, status code: " + str(response.status_code)
+    site_status = " >> HTTP Ok, status code: " + str(response.status_code)
     failed = False
     msg = "HTTP Ok, status code: " + str(response.status_code)
-    rc = 0
+    rc = response.status_code
   except requests.exceptions.HTTPError as err:
-    result = url + " >> HTTP Error code: "+ str(response.status_code) + '. Response is: {content}'.format(content=err.response.content)
+    site_status = " >> HTTP Error code: " + '. Response is: {content}'.format(content=err.response.content)
     msg = "HTTP Error code: "+ str(response.status_code)
+    rc = response.status_code
   except requests.exceptions.ConnectionError:
-    msg = 'Seems like dns lookup failed..' + url
+    msg = 'Seems like dns lookup failed..'
   except requests.exceptions.ConnectTimeout:
-    msg = 'Oops. Connection timeout occured!' + url
+    msg = 'Oops. Connection timeout occured!'
   except requests.exceptions.ReadTimeout:
-    msg = 'Oops. Read timeout occured' + url
-  return(failed, result, rc, msg, url)
+    msg = 'Oops. Read timeout occured'
+  return(failed, site_status, rc, msg)
     
 def main():
     # Аргументы для модуля
