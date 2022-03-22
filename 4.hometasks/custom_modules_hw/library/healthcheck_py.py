@@ -70,7 +70,7 @@ def status_code(addr, tls):
   result = ''
   rc = 1
   try:
-    response = requests.get(url, allow_redirects=False, timeout=5)
+    response = requests.get(url, verify=False, allow_redirects=False, timeout=5)
     response.raise_for_status()
     result = url + " >> HTTP Ok, status code: " + str(response.status_code)
     failed = False
