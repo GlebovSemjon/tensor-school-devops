@@ -21,7 +21,7 @@ function errorcode_select {
             echo "{\"failed\": true, \"rc\": \"$code_id\", \"msg\": \"Server Error\", \"site_status\": \"$code\"}"
         fi
     else
-        echo "{\"failed\": true, \"rc\": \"0\", \"msg\": \"site not found\", \"site_status\": \"$code\"}"
+        echo "{\"failed\": true, \"rc\": \"1\", \"msg\": \"site not found\", \"site_status\": \"not available\"}"
     fi
 }
 
