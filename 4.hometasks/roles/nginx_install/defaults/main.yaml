@@ -1,5 +1,0 @@
-nginx_port_no_tls: 80
-nginx_port_tls: 443
-nginx_root_dir: '/usr/share/nginx/html'
-SSL_dir: '/etc/nginx/ssl'
-server_hostname: 'hometasks3.local'
