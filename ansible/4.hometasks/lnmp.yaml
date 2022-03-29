@@ -1,0 +1,39 @@
+---
+- hosts: nodes
+  become: true
+  vars_files:
+    - vars/main.yaml
+  roles:
+  - role: nginx_install
+    tags:
+    - nginx
+  - role: mariadb_install
+    tags:
+    - mariadb
+  - role: php-fpm_install
+    tags:
+    - php
+  - role: wordpress_install
+    tags:
+    - wordpress
+
+  post_tasks:
+  - name: add hosts {{ server_hostname }}
+    tags:
+    - check
+    connection: local
+    lineinfile:
+      dest: /etc/hosts
+      regexp: ''
+      line: "{{ ansible_host }} {{ server_hostname }}"
+      insertafter: EOF
+      backup: yes
+  - name: check ssl https://{{ server_hostname }} from control server
+    become: false
+    uri:
+      url: "https://{{ server_hostname }}"
+      return_content: true
+      validate_certs: no
+    connection: local
+    register: example_webpage_out
+    failed_when: example_webpage_out.status != 200

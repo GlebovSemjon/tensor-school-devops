@@ -1,0 +1,9 @@
+---
+- name: test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: conversion_mac
+      debug:
+        msg: "{{ mac | default('48201568a68d') | conversion_mac }}"

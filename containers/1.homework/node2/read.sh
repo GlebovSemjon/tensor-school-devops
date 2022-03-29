@@ -2,6 +2,7 @@
 sleep 5s
 while [ -f var/out ]
     do
-        tail -n 1 var/out
+        progress=$( tail -n 1 var/out )
+        echo $progress
         sleep 5s
     done

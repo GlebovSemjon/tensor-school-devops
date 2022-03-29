@@ -1,0 +1,50 @@
+---
+- name: create nginx repo definition
+  copy:
+    src: nginx.repo
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install nginx
+  yum:
+    name: nginx
+    update_cache: true
+    state: present
+
+- name: copy main nginx config file
+  copy:
+    src: files/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+
+- name: import SSL certificate generation role
+  import_role:
+    name: create_SSL
+
+- name: ensure nginx is enabled and started
+  service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Populate service facts
+  service_facts:
+  register: service_facts_list
+
+- name: Ensure firewalld rule for nginx is enabled
+  firewalld:
+    port: "{{ port }}/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop:
+    - "{{ nginx_port_no_tls }}"
+    - "{{ nginx_port_tls }}"
+  loop_control:
+    loop_var: port
+  when: service_facts_list.ansible_facts.services["firewalld.service"].state == "running"
