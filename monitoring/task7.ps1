@@ -1,6 +1,6 @@
 ﻿Remove-Variable -Name * -Force -ErrorAction SilentlyContinue
 
-$mem_counter = Get-Counter   "\Память\% использования выделенной памяти" # "\Memory\% Committed Bytes In Use"
+$mem_counter = Get-Counter   "\Память\% использования выделенной памяти"
 $mem = $mem_counter.Readings.Split()[5]
 $mem = $mem.Split(',')
 $mem = $mem[0]+"."+$mem[1].Remove(2)
