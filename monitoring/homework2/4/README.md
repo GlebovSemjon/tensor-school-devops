@@ -4,7 +4,7 @@
 * штатными срествами telegraf  
   
 Первые 2 скрипта считают общую нагрузку, telegraf отдельно по каждому режиму user, system и т.д.  
-![](https://github.com/GlebovSemjon/tensor-school-devops/monitoring/homework2/4/percent used cpu SH_PY_Telegraf.JPG)
+![]("https://github.com/GlebovSemjon/tensor-school-devops/monitoring/homework2/4/percent used cpu SH_PY_Telegraf.JPG")
 На графиках хорошо видно, что точность сбора метрик практически одинаковая,  
 и рост времени использования ЦП в пользовательском режиме синхронен по все графикам,  
 с небольшой погрешностью времени снятия и отправки метрик.
