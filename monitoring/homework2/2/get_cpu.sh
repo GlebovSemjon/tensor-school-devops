@@ -19,6 +19,6 @@ do
     let "TOTAL += $i"
 done
 
-LOAD=$(printf '%.2f\n' "$(echo "scale=2; ($TOTAL-${STATD[3]})*100/$TOTAL"| bc)")
+LOAD=$(printf '%.2f\n' "$(echo "scale=2; ($TOTAL-${STATD[3]}-${STATD[4]})*100/$TOTAL"| bc)")
 
 echo cpu_used,command=SH cpu_percent=$LOAD $TS
