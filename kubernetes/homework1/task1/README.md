@@ -1,5 +1,5 @@
 ```sh
-kubectl apply -f node-exporter.ymlrter.yml  
+kubectl apply -f node-exporter.yml
 ```
 ```sh
 kubectl get po  
